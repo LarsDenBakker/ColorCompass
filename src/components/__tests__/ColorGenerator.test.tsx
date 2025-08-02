@@ -17,16 +17,28 @@ vi.mock('../../utils/colorUtils', () => ({
 describe('ColorGenerator', () => {
   it('renders color generator with initial color', () => {
     const mockOnColorChange = vi.fn()
-    render(<ColorGenerator selectedColor="#3B82F6" onColorChange={mockOnColorChange} />)
+    render(
+      <ColorGenerator
+        selectedColor="#3B82F6"
+        onColorChange={mockOnColorChange}
+        isDarkMode={false}
+      />
+    )
 
-    expect(screen.getByText('🎨 Color Studio')).toBeInTheDocument()
+    expect(screen.getByText('Enter Color Code')).toBeInTheDocument()
     expect(screen.getByDisplayValue('#3B82F6')).toBeInTheDocument()
-    expect(screen.getByText('Current Color')).toBeInTheDocument()
+    expect(screen.getByText('🎲 Generate Random Color')).toBeInTheDocument()
   })
 
   it('calls onColorChange when color input changes', () => {
     const mockOnColorChange = vi.fn()
-    render(<ColorGenerator selectedColor="#3B82F6" onColorChange={mockOnColorChange} />)
+    render(
+      <ColorGenerator
+        selectedColor="#3B82F6"
+        onColorChange={mockOnColorChange}
+        isDarkMode={false}
+      />
+    )
 
     const textInput = screen.getByDisplayValue('#3B82F6')
     fireEvent.change(textInput, { target: { value: '#FF0000' } })
@@ -36,9 +48,15 @@ describe('ColorGenerator', () => {
 
   it('generates random color when button is clicked', () => {
     const mockOnColorChange = vi.fn()
-    render(<ColorGenerator selectedColor="#3B82F6" onColorChange={mockOnColorChange} />)
+    render(
+      <ColorGenerator
+        selectedColor="#3B82F6"
+        onColorChange={mockOnColorChange}
+        isDarkMode={false}
+      />
+    )
 
-    const randomButton = screen.getByText('Generate Random Color')
+    const randomButton = screen.getByText('🎲 Generate Random Color')
     fireEvent.click(randomButton)
 
     expect(mockOnColorChange).toHaveBeenCalledWith('#AABBCC')
