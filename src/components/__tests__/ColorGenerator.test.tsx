@@ -5,6 +5,13 @@ import ColorGenerator from '../ColorGenerator'
 // Mock the colorUtils module
 vi.mock('../../utils/colorUtils', () => ({
   generateRandomColor: vi.fn(() => '#AABBCC'),
+  hexToRgb: vi.fn((hex: string) => {
+    if (hex === '#3B82F6') return { r: 59, g: 130, b: 246 }
+    if (hex === '#FF0000') return { r: 255, g: 0, b: 0 }
+    return { r: 170, g: 187, b: 204 }
+  }),
+  rgbToHsl: vi.fn(() => ({ h: 213, s: 88, l: 60 })),
+  hslToHex: vi.fn(() => '#3B82F6'),
 }))
 
 describe('ColorGenerator', () => {
@@ -14,6 +21,7 @@ describe('ColorGenerator', () => {
 
     expect(screen.getByText('Color Generator')).toBeInTheDocument()
     expect(screen.getByDisplayValue('#3B82F6')).toBeInTheDocument()
+    expect(screen.getByText('Color Sliders')).toBeInTheDocument()
   })
 
   it('calls onColorChange when color input changes', () => {
