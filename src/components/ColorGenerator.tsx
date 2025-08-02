@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { generateRandomColor } from '../utils/colorUtils'
+import ColorSliders from './ColorSliders'
 
 interface ColorGeneratorProps {
   selectedColor: string
@@ -25,7 +26,7 @@ const ColorGenerator = ({ selectedColor, onColorChange }: ColorGeneratorProps) =
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
       <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">Color Generator</h2>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div>
           <label
             htmlFor="color-input"
@@ -57,6 +58,10 @@ const ColorGenerator = ({ selectedColor, onColorChange }: ColorGeneratorProps) =
         >
           🎲 Generate Random Color
         </button>
+
+        <div className="border-t border-gray-200 dark:border-gray-600 pt-6">
+          <ColorSliders selectedColor={selectedColor} onColorChange={onColorChange} />
+        </div>
       </div>
     </div>
   )
