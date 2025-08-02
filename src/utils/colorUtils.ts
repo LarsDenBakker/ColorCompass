@@ -401,6 +401,28 @@ export const getSkinToneHex = (skinTone: PersonalColors['skinTone']): string => 
   return skinTones[skinTone]
 }
 
+export const getHairColorHex = (hairColor: PersonalColors['hairColor']): string => {
+  const hairColors = {
+    blonde: '#F5DEB3', // Wheat
+    brown: '#8B4513', // Saddle brown
+    black: '#2F4F4F', // Dark slate gray
+    red: '#CD5C5C', // Indian red
+    grey: '#808080', // Gray
+  }
+  return hairColors[hairColor]
+}
+
+export const getEyeColorHex = (eyeColor: PersonalColors['eyeColor']): string => {
+  const eyeColors = {
+    blue: '#4169E1', // Royal blue
+    green: '#228B22', // Forest green
+    brown: '#8B4513', // Saddle brown
+    hazel: '#DAA520', // Goldenrod
+    grey: '#708090', // Slate gray
+  }
+  return eyeColors[eyeColor]
+}
+
 export const getColorSuggestions = (personalColors: PersonalColors): string[] => {
   const { skinTone, hairColor, eyeColor } = personalColors
 
