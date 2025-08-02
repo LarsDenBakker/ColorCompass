@@ -106,7 +106,7 @@ function App() {
         </div>
 
         <footer className="text-center mt-12 sm:mt-16 text-gray-500 dark:text-gray-400">
-          <p className="text-sm sm:text-base">Built with React, Vite, and Tailwind CSS</p>
+          <p className="text-sm sm:text-base">Navigate the world of colors with ease</p>
         </footer>
       </div>
     </div>
