@@ -2,15 +2,25 @@ import { hexToRgb, rgbToHsl, copyToClipboard, getComplementaryColor } from '../u
 
 interface ColorCardProps {
   color: string
+  onColorChange?: (color: string) => void
 }
 
-const ColorCard = ({ color }: ColorCardProps) => {
+const ColorCard = ({ color, onColorChange }: ColorCardProps) => {
   const rgb = hexToRgb(color)
   const hsl = rgb ? rgbToHsl(rgb.r, rgb.g, rgb.b) : null
   const complementaryColor = getComplementaryColor(color)
 
   const handleCopy = async (text: string) => {
     await copyToClipboard(text)
+  }
+
+  const handleComplementaryClick = async () => {
+    // Copy to clipboard
+    await copyToClipboard(complementaryColor)
+    // Update main selected color if callback is provided
+    if (onColorChange) {
+      onColorChange(complementaryColor)
+    }
   }
 
   return (
@@ -36,7 +46,7 @@ const ColorCard = ({ color }: ColorCardProps) => {
           <div
             className="relative flex flex-col items-center justify-center overflow-hidden group cursor-pointer"
             style={{ backgroundColor: complementaryColor }}
-            onClick={() => handleCopy(complementaryColor)}
+            onClick={handleComplementaryClick}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-black/10" />
             <div className="relative z-10 bg-black/60 backdrop-blur-sm px-4 py-2 rounded-2xl text-white font-bold text-lg shadow-xl transform group-hover:scale-105 transition-all duration-300">
@@ -44,7 +54,8 @@ const ColorCard = ({ color }: ColorCardProps) => {
             </div>
             <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
               <div className="bg-white/90 backdrop-blur-sm text-gray-900 px-3 py-2 rounded-xl text-sm font-bold text-center">
-                Click to copy: {complementaryColor.toUpperCase()}
+                {onColorChange ? 'Tap to select & copy' : 'Click to copy'}:{' '}
+                {complementaryColor.toUpperCase()}
               </div>
             </div>
           </div>
@@ -81,7 +92,7 @@ const ColorCard = ({ color }: ColorCardProps) => {
 
           <div
             className="group p-4 bg-gradient-to-r from-gray-50 to-blue-50 dark:from-gray-700 dark:to-blue-900/30 rounded-2xl border border-gray-200/50 dark:border-gray-600/50 hover:shadow-lg transition-all duration-300 cursor-pointer"
-            onClick={() => handleCopy(complementaryColor)}
+            onClick={handleComplementaryClick}
           >
             <div className="flex justify-between items-center">
               <span className="font-bold text-gray-700 dark:text-gray-300 text-lg">
