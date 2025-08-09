@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
+import userEvent from '@testing-library/user-event'
 import ColorCard from '../ColorCard'
 
 describe('ColorCard', () => {
@@ -31,5 +32,34 @@ describe('ColorCard', () => {
 
     expect(screen.getByText('#0000FF')).toBeInTheDocument()
     expect(screen.getByText('rgb(0, 0, 255)')).toBeInTheDocument()
+  })
+
+  it('calls onColorChange when complementary color is clicked', async () => {
+    const mockOnColorChange = vi.fn()
+    const user = userEvent.setup()
+
+    render(<ColorCard color="#3B82F6" onColorChange={mockOnColorChange} />)
+
+    // Find and click the complementary color area (the large color block)
+    const complementaryArea = screen.getByText('Complementary').closest('div')
+    expect(complementaryArea).toBeInTheDocument()
+
+    await user.click(complementaryArea!)
+
+    // The complementary color for #3B82F6 (blue) should be #F6AF3C (orange)
+    expect(mockOnColorChange).toHaveBeenCalledWith('#f6af3c')
+  })
+
+  it('does not call onColorChange when complementary color is clicked and no callback provided', async () => {
+    const user = userEvent.setup()
+
+    render(<ColorCard color="#3B82F6" />)
+
+    // Find and click the complementary color area
+    const complementaryArea = screen.getByText('Complementary').closest('div')
+    expect(complementaryArea).toBeInTheDocument()
+
+    // Should not throw or cause any issues
+    await user.click(complementaryArea!)
   })
 })

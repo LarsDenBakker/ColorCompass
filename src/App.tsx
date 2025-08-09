@@ -106,7 +106,7 @@ function App() {
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 max-w-7xl mx-auto">
           {/* Left column - ColorCard (always visible) */}
           <div className="order-2 xl:order-1">
-            <ColorCard color={selectedColor} />
+            <ColorCard color={selectedColor} onColorChange={handleColorChange} />
           </div>
 
           {/* Right column - Active tab content */}
