@@ -5,6 +5,27 @@
   flex-direction: column;
   padding: 1rem;
   max-width: 100%;
+  background: #1a1a1a;
+  background: linear-gradient(45deg, #ff0000 0%, #ff8800 16%, #ffff00 33%, #00ff00 50%, #0088ff 66%, #8800ff 83%, #ff0088 100%);
+  background-size: 400% 400%;
+  position: relative;
+}
+
+.app::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  z-index: 0;
+}
+
+.app > * {
+  position: relative;
+  z-index: 1;
 }
 
 .app-header {
@@ -12,68 +33,149 @@
   padding: 1rem 0;
 }
 
-.app-header h1 {
+.app-title {
   font-size: 2rem;
   margin: 0;
-  color: #646cff;
+  font-weight: bold;
 }
 
-.app-header p {
-  font-size: 1rem;
-  color: #666;
-  margin: 0.5rem 0 0;
+.color-text {
+  color: #8B5A9E;
+}
+
+.compass-text {
+  color: white;
+}
+
+.app-nav {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem 0;
+  border-bottom: 1px solid #333;
+  margin-bottom: 1rem;
+}
+
+.nav-tab {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 0.9rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.2s;
+}
+
+.nav-tab.active {
+  color: white;
+}
+
+.nav-tab:hover {
+  color: #ccc;
+}
+
+.nav-icon {
+  font-size: 1.2rem;
 }
 
 .app-main {
   flex: 1;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.color-wheel-container {
+  display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.card {
-  padding: 2rem;
-  background: #f9f9f9;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  max-width: 400px;
   width: 100%;
+  max-width: 400px;
 }
 
-.card h2 {
-  margin-top: 0;
-  color: #333;
+.color-wheel {
+  width: 100%;
+  height: auto;
+  max-width: 300px;
 }
 
-.button {
-  background: #646cff;
+.color-selection {
+  width: 100%;
+  max-width: 400px;
   color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-size: 1rem;
-  cursor: pointer;
-  margin: 1rem 0;
-  transition: background-color 0.2s;
-  touch-action: manipulation; /* Better touch responsiveness */
 }
 
-.button:hover {
-  background: #535bf2;
-}
-
-.button:active {
-  background: #4c52c7;
-  transform: translateY(1px);
-}
-
-.app-footer {
-  text-align: center;
-  padding: 1rem 0;
-  color: #666;
+.selection-title {
+  color: #999;
   font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
+
+.color-group {
+  margin-bottom: 1.5rem;
+}
+
+.color-group label {
+  display: block;
+  color: white;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.color-palette {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.color-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #333;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #ccc;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #8B5A9E;
+}
+
+.instruction {
+  color: #666;
+  font-size: 0.8rem;
+  text-align: center;
+  margin: 1rem 0 0 0;
+  font-style: italic;
+}
+
 
 /* Tablet and up */
 @media (min-width: 768px) {
@@ -81,12 +183,22 @@
     padding: 2rem;
   }
   
-  .app-header h1 {
+  .app-title {
     font-size: 2.5rem;
   }
   
-  .card {
-    padding: 3rem;
+  .color-wheel {
+    max-width: 350px;
+  }
+  
+  .color-swatch {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .options {
+    flex-direction: row;
+    justify-content: space-around;
   }
 }
 
@@ -97,7 +209,22 @@
     margin: 0 auto;
   }
   
-  .app-header h1 {
+  .app-title {
     font-size: 3rem;
+  }
+  
+  .color-wheel {
+    max-width: 400px;
+  }
+  
+  .app-main {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 3rem;
+  }
+  
+  .color-selection {
+    max-width: 300px;
   }
 }

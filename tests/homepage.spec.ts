@@ -1,32 +1,54 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('ColorCompass App', () => {
-  test('has title and basic functionality', async ({ page }) => {
+  test('has title and color compass interface', async ({ page }) => {
     await page.goto('/');
 
     // Expect a title "to contain" a substring
     await expect(page).toHaveTitle(/ColorCompass/);
 
     // Expect the main heading to be visible
-    await expect(page.getByRole('heading', { name: 'ColorCompass 🧭' })).toBeVisible();
-    await expect(page.getByText('Navigate the world of colors with ease')).toBeVisible();
+    await expect(page.getByText('COLOR')).toBeVisible();
+    await expect(page.getByText('Compass')).toBeVisible();
 
-    // Expect Hello World content
-    await expect(page.getByRole('heading', { name: 'Hello World!' })).toBeVisible();
-    await expect(page.getByText('This is a mobile-first React app built with Vite.')).toBeVisible();
+    // Expect navigation tabs
+    await expect(page.getByRole('button', { name: 'HOME' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /SKIN/ })).toBeVisible();
+    await expect(page.getByRole('button', { name: /PAINT/ })).toBeVisible();
+    await expect(page.getByRole('button', { name: /MOODBOARD/ })).toBeVisible();
 
-    // Test the counter button
-    const button = page.getByRole('button', { name: 'Tapped 0 times' });
-    await expect(button).toBeVisible();
+    // Expect color selection interface
+    await expect(page.getByText('SELECTED')).toBeVisible();
+    await expect(page.getByText('main color')).toBeVisible();
+    await expect(page.getByText('complementary color')).toBeVisible();
+
+    // Test navigation tab switching
+    const homeTab = page.getByRole('button', { name: 'HOME' });
+    const skinTab = page.getByRole('button', { name: /SKIN/ });
     
-    await button.click();
-    await expect(page.getByRole('button', { name: 'Tapped 1 times' })).toBeVisible();
-    
-    await button.click();
-    await expect(page.getByRole('button', { name: 'Tapped 2 times' })).toBeVisible();
+    await expect(homeTab).toHaveClass(/active/);
+    await skinTab.click();
+    await expect(skinTab).toHaveClass(/active/);
+  });
 
-    // Expect footer text
-    await expect(page.getByText('Built with React, Vite, and ❤️')).toBeVisible();
+  test('has color options and checkboxes', async ({ page }) => {
+    await page.goto('/');
+
+    // Test checkboxes
+    const skinToneCheckbox = page.getByRole('checkbox', { name: 'skin tone' });
+    const paintColorCheckbox = page.getByRole('checkbox', { name: 'paint color' });
+    const exportCheckbox = page.getByRole('checkbox', { name: 'export to moodboard' });
+
+    await expect(skinToneCheckbox).toBeChecked();
+    await expect(paintColorCheckbox).toBeChecked();
+    await expect(exportCheckbox).not.toBeChecked();
+
+    // Test checkbox interaction
+    await exportCheckbox.click();
+    await expect(exportCheckbox).toBeChecked();
+
+    // Expect instruction text
+    await expect(page.getByText('double tap or hold to select colors')).toBeVisible();
   });
 
   test('is mobile-friendly', async ({ page }) => {
@@ -35,12 +57,20 @@ test.describe('ColorCompass App', () => {
     await page.goto('/');
 
     // Check that the app renders properly on mobile
-    await expect(page.getByRole('heading', { name: 'ColorCompass 🧭' })).toBeVisible();
-    const button = page.getByRole('button', { name: 'Tapped 0 times' });
-    await expect(button).toBeVisible();
+    await expect(page.getByText('COLOR')).toBeVisible();
+    await expect(page.getByText('Compass')).toBeVisible();
     
-    // Test touch interaction
-    await button.tap();
-    await expect(page.getByRole('button', { name: 'Tapped 1 times' })).toBeVisible();
+    // Check navigation tabs are accessible on mobile
+    await expect(page.getByRole('button', { name: 'HOME' })).toBeVisible();
+    await expect(page.getByRole('button', { name: /SKIN/ })).toBeVisible();
+    
+    // Test touch interaction on navigation
+    const skinTab = page.getByRole('button', { name: /SKIN/ });
+    await skinTab.tap();
+    await expect(skinTab).toHaveClass(/active/);
+
+    // Check color selection interface is visible on mobile
+    await expect(page.getByText('main color')).toBeVisible();
+    await expect(page.getByText('complementary color')).toBeVisible();
   });
 });
