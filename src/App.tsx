@@ -6,6 +6,8 @@ function App() {
   const [selectedValue, setSelectedValue] = useState(0.7) // Start with moderate value
   const [mainColor, setMainColor] = useState('#8B5A9E')
   const [isDragging, setIsDragging] = useState(false)
+  const [hueMarkerPosition, setHueMarkerPosition] = useState({ x: 0, y: 0 })
+  const [valueMarkerPosition, setValueMarkerPosition] = useState({ x: 0, y: 0 })
   const colorWheelRef = useRef<SVGSVGElement>(null)
   
   const [options, setOptions] = useState({
@@ -56,12 +58,35 @@ function App() {
     return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`
   }
 
+  // Calculate marker positions
+  const calculateHueMarkerPosition = useCallback((hue: number) => {
+    const angle = (hue * Math.PI) / 180
+    const radius = 170 // Outer ring radius
+    const x = 200 + radius * Math.cos(angle)
+    const y = 200 + radius * Math.sin(angle)
+    return { x, y }
+  }, [])
+
+  const calculateValueMarkerPosition = useCallback((value: number) => {
+    // For the inner ring, position the marker based on value around the circumference
+    // 0 = 0 degrees (right side), 1 = 360 degrees (back to right side)
+    const angle = (value * 360 * Math.PI) / 180
+    const radius = 140 // Inner ring radius
+    const x = 200 + radius * Math.cos(angle)
+    const y = 200 + radius * Math.sin(angle)
+    return { x, y }
+  }, [])
+
   // Update main color when hue or value changes
   const updateMainColor = useCallback((hue: number, value: number) => {
     const color = hsvToRgb(hue, 1, value) // Full saturation, variable value
     const hexColor = rgbToHex(color)
     setMainColor(hexColor)
-  }, [])
+    
+    // Update marker positions
+    setHueMarkerPosition(calculateHueMarkerPosition(hue))
+    setValueMarkerPosition(calculateValueMarkerPosition(value))
+  }, [calculateHueMarkerPosition, calculateValueMarkerPosition])
 
   // Initialize color on component mount
   React.useEffect(() => {
@@ -105,10 +130,12 @@ function App() {
       updateMainColor(normalizedAngle, selectedValue)
       setIsDragging(true)
     } else if (distance >= valueRingInner && distance <= valueRingOuter) {
-      // Second ring - value selection (black to full color)
-      // Map distance from inner to outer of ring to value 0-1
-      const ringPosition = (distance - valueRingInner) / (valueRingOuter - valueRingInner)
-      const value = Math.max(0, Math.min(1, ringPosition))
+      // Second ring - value selection (black to white circumferentially)
+      // Map angle around the circle to value 0-1
+      const angle = (Math.atan2(y, x) * 180) / Math.PI
+      const normalizedAngle = ((angle + 360) % 360)
+      // Map 0-360 degrees to 0-1 value (0 degrees = black, 180 degrees = white)
+      const value = Math.max(0, Math.min(1, normalizedAngle / 360))
       setSelectedValue(value)
       updateMainColor(selectedHue, value)
       setIsDragging(true)
@@ -134,8 +161,9 @@ function App() {
       setSelectedHue(normalizedAngle)
       updateMainColor(normalizedAngle, selectedValue)
     } else if (distance >= valueRingInner && distance <= valueRingOuter) {
-      const ringPosition = (distance - valueRingInner) / (valueRingOuter - valueRingInner)
-      const value = Math.max(0, Math.min(1, ringPosition))
+      const angle = (Math.atan2(y, x) * 180) / Math.PI
+      const normalizedAngle = ((angle + 360) % 360)
+      const value = Math.max(0, Math.min(1, normalizedAngle / 360))
       setSelectedValue(value)
       updateMainColor(selectedHue, value)
     }
@@ -217,15 +245,62 @@ function App() {
               style={{ cursor: 'pointer' }}
             />
             
-            {/* Second ring - black to white gradient for value selection */}
-            <circle 
-              cx="200" 
-              cy="200" 
-              r="140" 
-              fill="none" 
-              stroke="url(#valueGradient)" 
-              strokeWidth="20"
-              style={{ cursor: 'pointer' }}
+            {/* Second ring - multiple segments for black to white gradient */}
+            <g>
+              {Array.from({ length: 36 }, (_, i) => {
+                const startAngle = (i * 10) - 90 // Start from top (-90 degrees)
+                const endAngle = ((i + 1) * 10) - 90
+                const value = i / 35 // 0 to 1
+                const grayValue = Math.round(value * 255)
+                const color = `rgb(${grayValue}, ${grayValue}, ${grayValue})`
+                
+                // Convert angles to radians
+                const startRad = (startAngle * Math.PI) / 180
+                const endRad = (endAngle * Math.PI) / 180
+                
+                // Calculate path for arc segment
+                const innerR = 130
+                const outerR = 150
+                const x1 = 200 + innerR * Math.cos(startRad)
+                const y1 = 200 + innerR * Math.sin(startRad)
+                const x2 = 200 + outerR * Math.cos(startRad)
+                const y2 = 200 + outerR * Math.sin(startRad)
+                const x3 = 200 + outerR * Math.cos(endRad)
+                const y3 = 200 + outerR * Math.sin(endRad)
+                const x4 = 200 + innerR * Math.cos(endRad)
+                const y4 = 200 + innerR * Math.sin(endRad)
+                
+                return (
+                  <path
+                    key={i}
+                    d={`M ${x1} ${y1} L ${x2} ${y2} A ${outerR} ${outerR} 0 0 1 ${x3} ${y3} L ${x4} ${y4} A ${innerR} ${innerR} 0 0 0 ${x1} ${y1} Z`}
+                    fill={color}
+                    style={{ cursor: 'pointer' }}
+                  />
+                )
+              })}
+            </g>
+            
+            {/* Hue selection marker */}
+            <circle
+              cx={hueMarkerPosition.x}
+              cy={hueMarkerPosition.y}
+              r="6"
+              fill="white"
+              stroke="#333"
+              strokeWidth="2"
+              style={{ pointerEvents: 'none' }}
+            />
+            
+            {/* Value selection marker */}
+            <circle
+              cx={valueMarkerPosition.x}
+              cy={valueMarkerPosition.y}
+              r="6"
+              fill="white"
+              stroke="#333"
+              strokeWidth="2"
+              style={{ pointerEvents: 'none' }}
             />
             
             {/* Gradient definitions */}
@@ -246,11 +321,12 @@ function App() {
                 <stop offset="100%" stopColor="#ff0000" />
               </linearGradient>
               
-              {/* Value gradient (white to black radially) */}
-              <radialGradient id="valueGradient" cx="50%" cy="50%">
-                <stop offset="0%" stopColor="#ffffff"/>
-                <stop offset="100%" stopColor="#000000"/>
-              </radialGradient>
+              {/* Value gradient (black to white circumferentially) */}
+              <linearGradient id="valueGradient" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stopColor="#000000"/>
+                <stop offset="50%" stopColor="#666666"/>
+                <stop offset="100%" stopColor="#ffffff"/>
+              </linearGradient>
             </defs>
           </svg>
         </div>
