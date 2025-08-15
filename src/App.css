@@ -1,0 +1,103 @@
+/* Mobile-first styles */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  max-width: 100%;
+}
+
+.app-header {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.app-header h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: #646cff;
+}
+
+.app-header p {
+  font-size: 1rem;
+  color: #666;
+  margin: 0.5rem 0 0;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.card h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.button {
+  background: #646cff;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin: 1rem 0;
+  transition: background-color 0.2s;
+  touch-action: manipulation; /* Better touch responsiveness */
+}
+
+.button:hover {
+  background: #535bf2;
+}
+
+.button:active {
+  background: #4c52c7;
+  transform: translateY(1px);
+}
+
+.app-footer {
+  text-align: center;
+  padding: 1rem 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Tablet and up */
+@media (min-width: 768px) {
+  .app {
+    padding: 2rem;
+  }
+  
+  .app-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .card {
+    padding: 3rem;
+  }
+}
+
+/* Desktop and up */
+@media (min-width: 1024px) {
+  .app {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  
+  .app-header h1 {
+    font-size: 3rem;
+  }
+}

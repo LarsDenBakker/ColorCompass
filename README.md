@@ -1,54 +1,41 @@
 # ColorCompass 🧭
 
-A modern, responsive color utility application built with React, TypeScript, and Tailwind CSS.
+A modern, responsive color utility application built with React, TypeScript, and Vite.
 
-![ColorCompass Screenshot](https://github.com/user-attachments/assets/968c14ea-ea2c-4774-a28e-355bb361a87d)
+![Desktop View](https://github.com/user-attachments/assets/52dd8178-6f9c-407c-92dc-2dde21875eb6)
 
-## Features
-
-- 🎨 **Interactive Color Picker**: Choose colors using a visual color picker or hex input
-- 🎲 **Random Color Generator**: Generate random colors with a single click
-- 📋 **Multiple Color Formats**: View and copy colors in HEX, RGB, and HSL formats
-- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
-- 🌓 **Dark Mode Support**: Built with dark mode compatibility
-- ⚡ **Fast & Modern**: Built with Vite for lightning-fast development and building
+![Mobile View](https://github.com/user-attachments/assets/f7df1ae7-60d7-434a-a828-a76f80bd1473)
 
 ## Tech Stack
 
-- **Frontend Framework**: React 19 with TypeScript
-- **Build Tool**: Vite 7
-- **Styling**: Tailwind CSS 4
-- **Testing**:
-  - Unit Tests: Vitest + React Testing Library
-  - E2E Tests: Playwright
-- **Code Quality**: ESLint + Prettier
-- **Git Hooks**: Husky + lint-staged
-- **Deployment**: Netlify (configured with `netlify.toml`)
+- **React 19** - Modern React with latest features
+- **TypeScript** - Type-safe development
+- **Vite** - Fast build tool and development server
+- **Vitest** - Unit testing framework
+- **Playwright** - End-to-end testing
+- **ESLint** - Code linting
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 18+
-- npm or yarn
+- npm
 
 ### Installation
 
 1. Clone the repository:
-
 ```bash
 git clone https://github.com/LarsDenBakker/ColorCompass.git
 cd ColorCompass
 ```
 
 2. Install dependencies:
-
 ```bash
 npm install
 ```
 
 3. Start the development server:
-
 ```bash
 npm run dev
 ```
@@ -62,88 +49,52 @@ npm run dev
 - `npm run preview` - Preview production build
 - `npm run test` - Run unit tests
 - `npm run test:ui` - Run tests with UI
-- `npm run test:coverage` - Run tests with coverage report
-- `npm run test:e2e` - Run E2E tests
-- `npm run test:e2e:ui` - Run E2E tests with UI
+- `npm run test:e2e` - Run E2E tests (requires `npx playwright install`)
 - `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
 
 ## Project Structure
 
 ```
 src/
-├── components/          # React components
-│   ├── ColorCard.tsx   # Color display and format conversion
-│   ├── ColorGenerator.tsx # Color input and generation
-│   └── __tests__/      # Component tests
-├── utils/              # Utility functions
-│   ├── colorUtils.ts   # Color conversion utilities
-│   └── __tests__/      # Utility tests
+├── __tests__/          # Unit tests
 ├── test/               # Test setup
 ├── App.tsx             # Main application component
+├── App.css             # Application styles
 ├── main.tsx            # Application entry point
 └── index.css           # Global styles
+
+tests/                  # E2E tests
+├── homepage.spec.ts    # Homepage E2E tests
+
 ```
 
-## Features in Detail
+## Features
 
-### Color Generation
-
-- Visual color picker for intuitive color selection
-- Text input for precise hex color values
-- Random color generator for inspiration
-
-### Color Format Conversion
-
-- **HEX**: Standard hexadecimal color codes
-- **RGB**: Red, Green, Blue values (0-255)
-- **HSL**: Hue, Saturation, Lightness values
-
-### Copy to Clipboard
-
-Click any color value to copy it to your clipboard for easy use in your projects.
+- **Mobile-first design** - Responsive layout optimized for mobile devices
+- **Touch-friendly interactions** - Designed for touch interfaces
+- **Clean UI** - Simple and intuitive user interface
+- **Type-safe** - Built with TypeScript for better developer experience
+- **Fast development** - Powered by Vite for lightning-fast builds
+- **Comprehensive testing** - Unit tests with Vitest and E2E tests with Playwright
 
 ## Testing
 
-The project includes comprehensive testing:
-
-- **Unit Tests**: Components and utilities are tested with Vitest and React Testing Library
-- **E2E Tests**: Full application flows are tested with Playwright
-- **Coverage**: Test coverage reports available
-
-Run all tests:
-
+### Unit Tests
 ```bash
-npm test && npm run test:e2e
+npm test
 ```
 
-## Deployment
+### E2E Tests
+First install Playwright browsers:
+```bash
+npx playwright install
+```
 
-The project is configured for deployment on Netlify:
-
-1. Build output directory: `dist`
-2. Build command: `npm run build`
-3. Node.js version: 18
-4. Includes redirects for SPA routing
-5. Optimized caching headers
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Run tests: `npm test`
-5. Commit your changes: `git commit -m 'Add amazing feature'`
-6. Push to the branch: `git push origin feature/amazing-feature`
-7. Open a Pull Request
+Then run the tests:
+```bash
+npm run test:e2e
+```
 
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
-
-## Acknowledgments
-
-- Built with [Vite](https://vitejs.dev/)
-- Styled with [Tailwind CSS](https://tailwindcss.com/)
-- Tested with [Vitest](https://vitest.dev/) and [Playwright](https://playwright.dev/)
-- Icons from [Emoji](https://emojipedia.org/)
