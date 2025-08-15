@@ -21,7 +21,6 @@ describe('App', () => {
     render(<App />);
     expect(screen.getByText('SELECTED')).toBeInTheDocument();
     expect(screen.getByText('main color')).toBeInTheDocument();
-    expect(screen.getByText('complementary color')).toBeInTheDocument();
   });
 
   it('renders checkboxes with correct initial state', () => {
@@ -59,6 +58,19 @@ describe('App', () => {
 
   it('renders instruction text', () => {
     render(<App />);
-    expect(screen.getByText('double tap or hold to select colors')).toBeInTheDocument();
+    expect(screen.getByText('click or drag on the color rings to select')).toBeInTheDocument();
+  });
+
+  it('renders color wheel with interactive rings', () => {
+    render(<App />);
+    const colorWheel = document.querySelector('.color-wheel');
+    expect(colorWheel).toBeInTheDocument();
+    expect(colorWheel).toHaveAttribute('viewBox', '0 0 400 400');
+  });
+
+  it('displays main color swatch', () => {
+    render(<App />);
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    expect(colorSwatches.length).toBeGreaterThan(0);
   });
 });

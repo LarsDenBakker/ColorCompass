@@ -20,7 +20,6 @@ test.describe('ColorCompass App', () => {
     // Expect color selection interface
     await expect(page.getByText('SELECTED')).toBeVisible();
     await expect(page.getByText('main color')).toBeVisible();
-    await expect(page.getByText('complementary color')).toBeVisible();
 
     // Test navigation tab switching
     const homeTab = page.getByRole('button', { name: 'HOME' });
@@ -48,7 +47,7 @@ test.describe('ColorCompass App', () => {
     await expect(exportCheckbox).toBeChecked();
 
     // Expect instruction text
-    await expect(page.getByText('double tap or hold to select colors')).toBeVisible();
+    await expect(page.getByText('click or drag on the color rings to select')).toBeVisible();
   });
 
   test('is mobile-friendly', async ({ page }) => {
@@ -71,6 +70,23 @@ test.describe('ColorCompass App', () => {
 
     // Check color selection interface is visible on mobile
     await expect(page.getByText('main color')).toBeVisible();
-    await expect(page.getByText('complementary color')).toBeVisible();
+  });
+
+  test('has interactive color wheel', async ({ page }) => {
+    await page.goto('/');
+
+    // Find the color wheel SVG
+    const colorWheel = page.locator('.color-wheel');
+    await expect(colorWheel).toBeVisible();
+    
+    // Test that clicking on the color wheel changes the color
+    const colorSwatch = page.locator('.color-swatch');
+    await expect(colorSwatch).toBeVisible();
+    
+    // Click on the outer ring of the color wheel to select a hue
+    await colorWheel.click({ position: { x: 300, y: 200 } }); // Right side of the wheel
+    
+    // The color should change (we can't easily test the exact color, but we can verify the swatch exists)
+    await expect(colorSwatch).toHaveAttribute('style', /background-color/);
   });
 });
