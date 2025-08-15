@@ -5,7 +5,7 @@ test.describe('ColorCompass App', () => {
     await page.goto('/');
 
     // Expect a title "to contain" a substring
-    await expect(page).toHaveTitle(/Vite \+ React/);
+    await expect(page).toHaveTitle(/ColorCompass/);
 
     // Expect the main heading to be visible
     await expect(page.getByRole('heading', { name: 'ColorCompass 🧭' })).toBeVisible();

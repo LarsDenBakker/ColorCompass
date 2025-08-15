@@ -85,12 +85,7 @@ npm test
 ```
 
 ### E2E Tests
-First install Playwright browsers:
-```bash
-npx playwright install
-```
-
-Then run the tests:
+Run the E2E tests using the provided Playwright instance:
 ```bash
 npm run test:e2e
 ```
