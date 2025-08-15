@@ -5,29 +5,60 @@ import App from '../App';
 describe('App', () => {
   it('renders the ColorCompass title', () => {
     render(<App />);
-    expect(screen.getByText('ColorCompass 🧭')).toBeInTheDocument();
-    expect(screen.getByText('Navigate the world of colors with ease')).toBeInTheDocument();
+    expect(screen.getByText('COLOR')).toBeInTheDocument();
+    expect(screen.getByText('Compass')).toBeInTheDocument();
   });
 
-  it('renders Hello World content', () => {
+  it('renders navigation tabs', () => {
     render(<App />);
-    expect(screen.getByText('Hello World!')).toBeInTheDocument();
-    expect(screen.getByText('This is a mobile-first React app built with Vite.')).toBeInTheDocument();
+    expect(screen.getByText('HOME')).toBeInTheDocument();
+    expect(screen.getByText('SKIN')).toBeInTheDocument();
+    expect(screen.getByText('PAINT')).toBeInTheDocument();
+    expect(screen.getByText('MOODBOARD')).toBeInTheDocument();
   });
 
-  it('increments counter when button is clicked', () => {
+  it('renders color selection interface', () => {
     render(<App />);
-    const button = screen.getByText('Tapped 0 times');
+    expect(screen.getByText('SELECTED')).toBeInTheDocument();
+    expect(screen.getByText('main color')).toBeInTheDocument();
+    expect(screen.getByText('complementary color')).toBeInTheDocument();
+  });
+
+  it('renders checkboxes with correct initial state', () => {
+    render(<App />);
+    const skinToneCheckbox = screen.getByLabelText('skin tone');
+    const paintColorCheckbox = screen.getByLabelText('paint color');
+    const exportCheckbox = screen.getByLabelText('export to moodboard');
     
-    fireEvent.click(button);
-    expect(screen.getByText('Tapped 1 times')).toBeInTheDocument();
-    
-    fireEvent.click(button);
-    expect(screen.getByText('Tapped 2 times')).toBeInTheDocument();
+    expect(skinToneCheckbox).toBeChecked();
+    expect(paintColorCheckbox).toBeChecked();
+    expect(exportCheckbox).not.toBeChecked();
   });
 
-  it('renders footer text', () => {
+  it('toggles checkboxes when clicked', () => {
     render(<App />);
-    expect(screen.getByText('Built with React, Vite, and ❤️')).toBeInTheDocument();
+    const exportCheckbox = screen.getByLabelText('export to moodboard');
+    
+    expect(exportCheckbox).not.toBeChecked();
+    fireEvent.click(exportCheckbox);
+    expect(exportCheckbox).toBeChecked();
+  });
+
+  it('switches navigation tabs when clicked', () => {
+    render(<App />);
+    const homeTab = screen.getByRole('button', { name: /HOME/i });
+    const skinTab = screen.getByRole('button', { name: /SKIN/i });
+    
+    expect(homeTab).toHaveClass('active');
+    expect(skinTab).not.toHaveClass('active');
+    
+    fireEvent.click(skinTab);
+    expect(skinTab).toHaveClass('active');
+    expect(homeTab).not.toHaveClass('active');
+  });
+
+  it('renders instruction text', () => {
+    render(<App />);
+    expect(screen.getByText('double tap or hold to select colors')).toBeInTheDocument();
   });
 });
