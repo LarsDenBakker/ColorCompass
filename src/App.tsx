@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useCallback } from 'react'
 import './App.css'
 
 function App() {
@@ -57,16 +57,16 @@ function App() {
   }
 
   // Update main color when hue or value changes
-  const updateMainColor = (hue: number, value: number) => {
+  const updateMainColor = useCallback((hue: number, value: number) => {
     const color = hsvToRgb(hue, 1, value) // Full saturation, variable value
     const hexColor = rgbToHex(color)
     setMainColor(hexColor)
-  }
+  }, [])
 
   // Initialize color on component mount
   React.useEffect(() => {
     updateMainColor(selectedHue, selectedValue)
-  }, [])
+  }, [selectedHue, selectedValue, updateMainColor])
 
   // Handle color wheel interactions
   const getColorWheelPosition = (event: React.MouseEvent<SVGSVGElement> | MouseEvent) => {
@@ -115,7 +115,7 @@ function App() {
     }
   }
 
-  const handleMouseMove = (event: MouseEvent) => {
+  const handleMouseMove = useCallback((event: MouseEvent) => {
     if (!isDragging) return
     
     const position = getColorWheelPosition(event)
@@ -139,11 +139,11 @@ function App() {
       setSelectedValue(value)
       updateMainColor(selectedHue, value)
     }
-  }
+  }, [isDragging, selectedHue, selectedValue, updateMainColor])
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback(() => {
     setIsDragging(false)
-  }
+  }, [])
 
   // Add mouse event listeners for dragging
   React.useEffect(() => {
@@ -156,7 +156,7 @@ function App() {
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
     }
-  }, [isDragging, selectedHue, selectedValue])
+  }, [isDragging, handleMouseMove, handleMouseUp])
 
   return (
     <div className="app">
